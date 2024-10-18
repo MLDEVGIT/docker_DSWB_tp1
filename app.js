@@ -8,6 +8,7 @@ import { cargarDatosInicio } from "./models/datos-inicio.js";
 import { docenteRouter } from "./routes/docente-route.js";
 import { estudianteRouter } from "./routes/estudiante-route.js";
 import { cursoRouter } from "./routes/curso-route.js";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 const uri = process.env.MONGODB_URI;
@@ -20,19 +21,35 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(express.static(path.join(__dirname, "public")));
+console.log(__dirname);
+console.log(path.join(__dirname, "public"));
 
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-mongoose
-  .connect(uri, {})
-  .then(() => {
-    console.log("Conectado a MongoDB");
-    cargarDatosInicio();
-  })
-  .catch((error) => console.log("Error al conectar a MongoDB:", error));
+let connection;
+try {
+  connection = await mongoose.connect(uri, {});
+} catch (error) {
+  console.log("Error de conexión a MongoDB", error, uri);
+  try {
+    connection = await mongoose.connect("mongodb://localhost:27017/tpback", {});
+  } catch (e) {
+    console.log("Error de conexión a MongoDB", e, uri);
+  }
+}
+
+if (connection) {
+  console.log("Conectado a MongoDB", uri);
+  cargarDatosInicio();
+} else {
+  console.log("Error al conectar con la base de datos");
+  process.exit(1);
+}
 
 // Middleware para garantizar que no se pueda acceder a las rutas sin haberse
 // logueado, es decir accediendo a las página mediante el menu principal al
