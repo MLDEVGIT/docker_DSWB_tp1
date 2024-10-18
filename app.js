@@ -11,6 +11,10 @@ import { cursoRouter } from "./routes/curso-route.js";
 
 dotenv.config();
 const uri = process.env.MONGODB_URI;
+//const uri = "mongodb+srv://tpback:tpback@cluster0.i9e4hxq.mongodb.net/tpback08?retryWrites=true&w=majority&appName=Cluster0";
+
+console.log("MongoDB URI:", process.env.MONGODB_URI);
+//console.log("MongoDB URI:", uri);
 
 const app = express();
 app.use(express.json());
