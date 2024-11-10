@@ -1,36 +1,31 @@
+
 import { Estudiante, Curso, Usuario, Rol } from "../models/models.js";
 
 /**
- * Controlador para la vista de alta de estudiante
+ * Controlador para ver información de un estudiante a través de la API.
  */
-export function nuevoEstudiante(req, res) {
-  res.render("estudiante-nuevo");
-}
-
-/**
- * Controlador para la vista de ver estudiante. Envía los datos del estudiante
- * y los cursos en los que está inscrito (con sus respectivas calificaciones).
- * Recibe el id del estudiante como parámetro.
- */
-export async function verEstudiante(req, res) {
-  let estudiante = await Estudiante.findById(req.params.id);
-  let cursos = await buscarCursosPorEstudiante(req.params.id);
-  res.render("estudiante-ver", { estudiante, cursos });
+export async function apiVerEstudiante(req, res) {
+  try {
+    let estudiante = await Estudiante.findById(req.params.id);
+    let cursos = await buscarCursosPorEstudiante(req.params.id);
+    res.status(200).json({ estudiante, cursos });
+  } catch (error) {
+    console.error("--- Error al ver estudiante >>> ", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
 }
 
 /**
  * Función para buscar los cursos en los que está inscrito un estudiante (junto con sus calificaciones).
  */
-export async function buscarCursosPorEstudiante(estudianteId) {
+async function buscarCursosPorEstudiante(estudianteId) {
   try {
-    // Busca los cursos donde el estudiante está inscrito
     const cursos = await Curso.find({
       "estudiantes.estudiante": estudianteId,
     })
       .populate("estudiantes.estudiante")
       .exec();
 
-    // Procesa los cursos para extraer las calificaciones correspondientes
     const cursosConCalificacion = cursos.map((curso) => {
       const estudianteEnCurso = curso.estudiantes.find(
         (e) => e.estudiante._id.toString() === estudianteId
@@ -48,9 +43,9 @@ export async function buscarCursosPorEstudiante(estudianteId) {
 }
 
 /**
- * Controlador para procesar el formulario de alta de estudiante. Guarda el estudiante en la base de datos y crea un usuario asociado.
+ * Controlador para procesar el alta de estudiante a través de la API.
  */
-export async function postNuevoEstudiante(req, res) {
+export async function apiPostNuevoEstudiante(req, res) {
   try {
     const nuevoEstudiante = new Estudiante(req.body);
 
@@ -58,9 +53,7 @@ export async function postNuevoEstudiante(req, res) {
       dni: nuevoEstudiante.dni,
     });
     if (estudianteExist) {
-      return res.render("estudiante-nuevo", {
-        error: "El estudiante ya existe",
-      });
+      return res.status(400).json({ error: "El estudiante ya existe" });
     }
 
     await nuevoEstudiante.save();
@@ -77,14 +70,9 @@ export async function postNuevoEstudiante(req, res) {
 
     await nuevoUsuario.save();
 
-    res.render("estudiante-nuevo", {
-      success: "Estudiante guardardo con éxito",
-    });
+    res.status(201).json({ message: "Estudiante guardado con éxito" });
   } catch (error) {
     console.error("--- Error al guardar estudiante >>> ", error);
-    res.status(500).render("error", {
-      message: "Alta de estudiante | Error interno del servidor.",
-      errorCode: 500,
-    });
+    res.status(500).json({ error: "Error interno del servidor" });
   }
 }

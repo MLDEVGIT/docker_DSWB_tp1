@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Curso, Estudiante, Docente, Rol, Usuario } from "./models.js";
+import { hashPassword } from "../auth.js";
 
 /**
  * Carga datos de ejemplo en la base de datos.
@@ -91,16 +92,16 @@ export async function cargarDatosInicio() {
 
   // Carga docentes
   const docentes = [
-    { nombre: "Juan Pérez", dni: "123456" },
-    { nombre: "María Gómez", dni: "234567" },
-    { nombre: "Luis Rodríguez", dni: "345678" },
-    { nombre: "Ana Torres", dni: "4444" },
-    { nombre: "Carlos Sánchez", dni: "567890" },
-    { nombre: "Laura Díaz", dni: "678901" },
-    { nombre: "Pedro Martínez", dni: "789012" },
-    { nombre: "Lucía Fernández", dni: "890123" },
-    { nombre: "José Ramírez", dni: "901234" },
-    { nombre: "Elena Castro", dni: "012345" },
+    { nombre: "Luis Rodriguez", dni: "123456" },
+    { nombre: "Jesus María Gónzalez", dni: "234567" },
+    { nombre: "Luisa Díaz", dni: "345678" },
+    { nombre: "Ana Quiroga", dni: "4444" },
+    { nombre: "Martín Sánchez", dni: "567890" },
+    { nombre: "Pedro Díaz", dni: "678901" },
+    { nombre: "Jorge Martínez", dni: "789012" },
+    { nombre: "Lucía Rivero", dni: "890123" },
+    { nombre: "Juan Dominguez", dni: "901234" },
+    { nombre: "Elena Quintana", dni: "012345" },
   ];
   try {
     await Docente.insertMany(docentes);
@@ -115,7 +116,7 @@ export async function cargarDatosInicio() {
   const usuarios = [
     {
       nombre: "admin",
-      password: "admin",
+      password: hashPassword("admin"),
       rol: listaRoles[0]._id,
       estudiante: null,
       docente: null,
@@ -125,7 +126,7 @@ export async function cargarDatosInicio() {
   listaEstudiantes.forEach((estudiante, index) => {
     usuarios.push({
       nombre: estudiante.dni,
-      password: estudiante.dni,
+      password: hashPassword(estudiante.dni),
       rol: listaRoles[2]._id,
       estudiante: estudiante._id,
       docente: null,
@@ -135,7 +136,7 @@ export async function cargarDatosInicio() {
   listaDocentes.forEach((docente, index) => {
     usuarios.push({
       nombre: docente.dni,
-      password: docente.dni,
+      password: hashPassword(docente.dni),
       rol: listaRoles[1]._id,
       estudiante: null,
       docente: docente._id,

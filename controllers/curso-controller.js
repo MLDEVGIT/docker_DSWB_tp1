@@ -8,6 +8,7 @@ export async function nuevoCurso(req, res) {
   try {
     const docentes = await Docente.find();
     const estudiantes = await Estudiante.find();
+
     res.render("curso-nuevo", { docentes, estudiantes });
   } catch (error) {
     console.error("--- Alta de curso | Error al obtener datos >>> ", error);
