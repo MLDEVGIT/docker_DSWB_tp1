@@ -83,7 +83,6 @@ export async function apiEditarNotasCurso(req, res) {
       });
     }
     curso.estudiantes = estudiantes;
-    console.log("CURSO: ", curso);
     await curso.save();
 
     res.status(200).json({ message: "Notas guardadas con éxito" });

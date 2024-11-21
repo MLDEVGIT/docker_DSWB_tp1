@@ -1,6 +1,6 @@
 import { SignJWT } from "jose";
 import { jwtVerify } from "jose/jwt/verify";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import { Curso } from "./models/models.js";
 
 /**
@@ -148,7 +148,6 @@ export async function verifyEdicionCurso(req, res, next) {
     }
   });
 
-  console.log("curso: ", curso.docentes);
   if (req.body.payload.usuario.rol.nombre === "administrador" || auth) {
     next();
   } else {

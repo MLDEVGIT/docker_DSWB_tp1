@@ -62,7 +62,7 @@ app.listen(PORT, () => {
 
 // Conexión a la base de datos
 
-async function connectMongo(uri) {
+export async function connectMongo(uri) {
   let connection;
   try {
     connection = await mongoose.connect(uri, {});
@@ -86,3 +86,5 @@ async function connectMongo(uri) {
     process.exit(1);
   }
 }
+
+export default app;

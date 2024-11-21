@@ -7,8 +7,6 @@ import { Usuario } from "../models/models.js";
 export async function apiLogin(req, res) {
   const { nombre, password, rememberMe } = req.body;
 
- 
-
   try {
     const usuario = await Usuario.findOne({
       nombre,
