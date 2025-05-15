@@ -1,45 +1,63 @@
-# DSWB - TP1
+# DSWB - TP1 - Proyecto Dockerizado Node.js + MongoDB
 
-Este proyecto está contenerizado con Docker utilizando Apache y PHP.
+Este proyecto consiste en una aplicación Node.js con Express y MongoDB, contenerizada utilizando Docker.
 
 ---
 
 ## Comandos Docker:
 
-### Construir la imagen:
+### Clonar el repositorio:
 
+```bash
+git clone https://github.com/MLDEVGIT/docker_DSWB_tp1.git
+cd docker_DSWB_tp1
+```
+
+### Crear el archivo `.env`:
+
+```env
+PORT=8080
+MONGODB_URI=mongodb://mongo:27017/tpback
+```
+
+### Construir y levantar los contenedores:
+
+```bash
 docker-compose build
-
-### Levantar el contenedor
-
 docker-compose up -d
+```
+
+### Verificar los contenedores:
+
+```bash
+docker ps
+```
 
 ### Acceder a la aplicación:
-- URL: [http://localhost:8080](http://localhost:8080)
+
+* Node.js (Back-End): [http://localhost:8180](http://localhost:8180)
 
 ---
 
-### Detener el contenedor:
+### Detener los contenedores:
 
+```bash
 docker-compose down
+```
 
-
+---
 
 # Grupo ondaViñasLopezHolc - Desarrollo de Sistemas Web (Back End) - 2° B - 2024
 
-## Cambios realizados para la segunda entrega
+## Desarrollo de la materia BackEnd -> DevOps
 
-- Utilización de cookies y JWT para la autenticación de usuarios
-- Middleware para verificar la autenticación de usuarios y redireccionamiento.
-- Opción "Recordarme" en el login para cambiar la duración de la cookie/token (1 hora si no se selecciona, 30 días si se selecciona)
-- Hash de contraseñas
-- API endpoints para las funciones de la aplicación (login, logout, alta de docentes, alta de estudiantes, alta de cursos, consulta de cursos, consulta de estudiantes, edición de notas del curso) para que puedan ser consumidas desde un frontend.
-- Middlewares en las rutas de las APIs, para verificar que el usuario que intenta acceder a un recurso tiene los permisos necesarios según su rol.
-- Testing con Vitest y SuperTest para: api-curso-controller.js, api-controller.js, curso-controller.js, y todas las funciones y middleware de autenticación presentes en auth.js. Elegimos Vitest en lugar de Jest dado que en nuestro proyecto utilizamos ESM Modules para importación en lugar de Common JS, y vimos en la documentación de Jest que solo tenían soporte experimental para ESM pero no recomendaban su utilización, en cambio Vitest soporta por defecto ESM y su API es casi la misma que Jest.
-- No utilizamos websockets dado que nuestra aplicación no requería de un módulo de chat u otro tipo de comunicación sincrónica.
-- Hicimos el deploy de la app en Render (https://dswb-tp1.onrender.com/). No logramos adaptarlo para que funcione en Vercel ya que nuestra app hace correr un servidor permanente y Vercel trabaja con serverless functions.
+* Dockerización del proyecto utilizando Node.js y MongoDB.
+* Middleware para autenticación con JWT y cookies.
+* API endpoints para CRUD de docentes, estudiantes y cursos.
+* Testing con Vitest y SuperTest para validación de endpoints y lógica del back-end.
+* Implementación de variables de entorno para configuración del puerto y conexión a MongoDB.
 
-## Instalación
+## Instalación en entorno local
 
 Instalar dependencias:
 
@@ -47,26 +65,24 @@ Instalar dependencias:
 npm install
 ```
 
-## Ejecución
-
-Para ejecutar la aplicación con nodemon, se debe correr el siguiente comando:
+Para ejecutar la aplicación sin Docker:
 
 ```bash
 npm run dev
 ```
 
-Para ejecutar la aplicación con node, se debe correr el siguiente comando:
+---
+
+### Pruebas y Testing
+
+Para correr los tests con Vitest:
 
 ```bash
-node app.js
+npx vitest
 ```
 
-## Prueba de la aplicación
+Usuarios de prueba:
 
-Para ingresar al sistema, se pueden utilizar los siguientes usuarios/contraseña de prueba:
-
-- "admin" / "admin" para acceder como administración
-- "4444" / "4444" para acceder como una docente en particular
-- "9999" / "9999" para acceder como una "estudiante" en particular
-
-Para correr los tests con vitest: `npx vitest`.
+* admin / admin
+* 4444 / 4444 (Docente)
+* 9999 / 9999 (Estudiante)
