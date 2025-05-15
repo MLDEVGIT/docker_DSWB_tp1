@@ -1,3 +1,30 @@
+# DSWB - TP1
+
+Este proyecto está contenerizado con Docker utilizando Apache y PHP.
+
+---
+
+## Comandos Docker:
+
+### Construir la imagen:
+
+docker-compose build
+
+### Levantar el contenedor
+
+docker-compose up -d
+
+### Acceder a la aplicación:
+- URL: [http://localhost:8080](http://localhost:8080)
+
+---
+
+### Detener el contenedor:
+
+docker-compose down
+
+
+
 # Grupo ondaViñasLopezHolc - Desarrollo de Sistemas Web (Back End) - 2° B - 2024
 
 ## Cambios realizados para la segunda entrega
